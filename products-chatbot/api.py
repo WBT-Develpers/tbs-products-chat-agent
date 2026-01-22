@@ -91,6 +91,32 @@ async def health_check():
     return HealthResponse(status="healthy", version="1.0.0")
 
 
+@app.get("/api/chat")
+async def chat_get():
+    """GET endpoint - provides information about how to use the chat API."""
+    return {
+        "message": "This endpoint requires a POST request with a JSON body.",
+        "method": "POST",
+        "endpoint": "/api/chat",
+        "required_fields": {
+            "message": "string (required) - Your question/query"
+        },
+        "optional_fields": {
+            "session_id": "string - For conversation continuity",
+            "temperature": "float (0-2) - LLM temperature",
+            "chat_model": "string - OpenAI model name",
+            "k": "integer (1-20) - Number of documents to retrieve",
+            "filters": "object - Search filters",
+            "system_prompt": "string - Custom system prompt"
+        },
+        "example": {
+            "message": "What products do you have?"
+        },
+        "docs": "/docs",
+        "note": "Use the interactive docs at /docs to test this endpoint, or use curl/Postman with POST method"
+    }
+
+
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     """

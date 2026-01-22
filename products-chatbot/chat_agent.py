@@ -180,10 +180,15 @@ or ask about specific product categories."""
         context_docs = result.get("context", [])
         sources = []
         for doc in context_docs:
+            # Convert id to string if it's not already (handles both int and str)
+            doc_id = doc.metadata.get("id", "Unknown")
+            if doc_id != "Unknown" and not isinstance(doc_id, str):
+                doc_id = str(doc_id)
+            
             sources.append({
                 "title": doc.metadata.get("title", "Unknown"),
                 "category": doc.metadata.get("category", "Unknown"),
-                "id": doc.metadata.get("id", "Unknown")
+                "id": doc_id
             })
         
         # Build updated chat history (caller should save this)
