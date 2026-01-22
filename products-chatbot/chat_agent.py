@@ -11,8 +11,14 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.documents import Document
 from langchain_core.messages import BaseMessage
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain.chains import create_history_aware_retriever, create_retrieval_chain
+try:
+    # Try LangChain v1.0+ imports (langchain-classic)
+    from langchain_classic.chains.combine_documents import create_stuff_documents_chain
+    from langchain_classic.chains import create_history_aware_retriever, create_retrieval_chain
+except ImportError:
+    # Fallback to LangChain 0.3.x imports
+    from langchain.chains.combine_documents import create_stuff_documents_chain
+    from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from supabase_vector_store import create_supabase_vector_store
 
 
