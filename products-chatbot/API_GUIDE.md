@@ -4,9 +4,9 @@ Welcome! This guide will help you integrate the Products Chatbot API into your N
 
 ## Quick Start
 
-The API is hosted on Railway. Your base URL will look like:
+The API is hosted on Railway at:
 ```
-https://your-app-name.railway.app
+https://tbs-products-chat-agent-production.up.railway.app
 ```
 
 ### Basic Chat Request
@@ -14,7 +14,9 @@ https://your-app-name.railway.app
 Here's the simplest way to send a message:
 
 ```javascript
-const response = await fetch('https://your-api.railway.app/api/chat', {
+const API_URL = 'https://tbs-products-chat-agent-production.up.railway.app';
+
+const response = await fetch(`${API_URL}/api/chat`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -26,13 +28,28 @@ const response = await fetch('https://your-api.railway.app/api/chat', {
 
 const data = await response.json();
 console.log(data.answer); // The AI's response
+console.log(data.sources); // Product sources used
+console.log(data.session_id); // Use this for conversation continuity
 ```
 
 ## API Endpoints
 
 ### 1. Chat Endpoint
 
-**POST** `/api/chat`
+**GET** `/api/chat` - Get usage instructions  
+**POST** `/api/chat` - Send a message to the chatbot and get a response
+
+#### GET /api/chat
+
+Returns helpful information about how to use the chat endpoint.
+
+```javascript
+const response = await fetch('https://tbs-products-chat-agent-production.up.railway.app/api/chat');
+const info = await response.json();
+// Returns endpoint documentation and usage examples
+```
+
+#### POST /api/chat
 
 Send a message to the chatbot and get a response.
 
@@ -70,21 +87,26 @@ All fields except `message` are optional:
 #### Example Request
 
 ```javascript
-const response = await fetch('https://your-api.railway.app/api/chat', {
+const API_URL = 'https://tbs-products-chat-agent-production.up.railway.app';
+
+const response = await fetch(`${API_URL}/api/chat`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-    message: 'Show me electronics products',
+    message: 'Show me solar panel products',
     temperature: 0.8,
     k: 5,
     filters: {
       is_active: true,
-      category: 'electronics'
+      category: 'solar'
     }
   })
 });
 
 const data = await response.json();
+console.log(data.answer); // AI response
+console.log(data.sources); // Array of product sources
+console.log(data.session_id); // Session ID for follow-up messages
 ```
 
 ### 2. Reset Endpoint
@@ -114,13 +136,18 @@ Clear the conversation history for a session.
 #### Example
 
 ```javascript
-const response = await fetch('https://your-api.railway.app/api/reset', {
+const API_URL = 'https://tbs-products-chat-agent-production.up.railway.app';
+
+const response = await fetch(`${API_URL}/api/reset`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     session_id: 'your-session-id'
   })
 });
+
+const data = await response.json();
+console.log(data.success); // true if successful
 ```
 
 ### 3. Health Check
@@ -130,9 +157,34 @@ const response = await fetch('https://your-api.railway.app/api/reset', {
 Check if the API is running.
 
 ```javascript
-const response = await fetch('https://your-api.railway.app/health');
+const API_URL = 'https://tbs-products-chat-agent-production.up.railway.app';
+
+const response = await fetch(`${API_URL}/health`);
 const data = await response.json();
 // { status: "healthy", version: "1.0.0" }
+```
+
+### 4. Root Endpoint
+
+**GET** `/`
+
+Get API information and available endpoints.
+
+```javascript
+const API_URL = 'https://tbs-products-chat-agent-production.up.railway.app';
+
+const response = await fetch(`${API_URL}/`);
+const data = await response.json();
+// { name: "Products Chatbot API", version: "1.0.0", docs: "/docs", health: "/health" }
+```
+
+### 5. Interactive API Documentation
+
+**GET** `/docs`
+
+Swagger UI for interactive API testing. Open in your browser:
+```
+https://tbs-products-chat-agent-production.up.railway.app/docs
 ```
 
 ## Parameters Explained
@@ -238,7 +290,7 @@ system_prompt: "You are a friendly product expert. Always mention product prices
 
 import { useState } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL || 'https://tbs-products-chat-agent-production.up.railway.app';
 
 export default function SimpleChat() {
   const [messages, setMessages] = useState([]);
@@ -346,7 +398,7 @@ export default function SimpleChat() {
 // hooks/useChat.js
 import { useState, useCallback } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL || 'https://tbs-products-chat-agent-production.up.railway.app';
 
 export function useChat() {
   const [messages, setMessages] = useState([]);
@@ -549,13 +601,35 @@ const response = await fetch(`${API_URL}/api/chat`, {
 In your Next.js project, add to `.env.local`:
 
 ```env
-NEXT_PUBLIC_CHAT_API_URL=https://your-api.railway.app
+NEXT_PUBLIC_CHAT_API_URL=https://tbs-products-chat-agent-production.up.railway.app
+```
+
+Or use the default URL directly in your code (already set in examples above).
+
+## Testing the API
+
+You can test the API using curl:
+
+```bash
+# Health check
+curl https://tbs-products-chat-agent-production.up.railway.app/health
+
+# Chat endpoint
+curl -X POST https://tbs-products-chat-agent-production.up.railway.app/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What products do you have?"}'
+
+# With session ID
+curl -X POST https://tbs-products-chat-agent-production.up.railway.app/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "Tell me more", "session_id": "your-session-id"}'
 ```
 
 ## Need Help?
 
-- Check the interactive API docs at `https://your-api.railway.app/docs`
+- Check the interactive API docs at `https://tbs-products-chat-agent-production.up.railway.app/docs`
 - Review the main README.md for architecture details
 - Test endpoints using the Swagger UI at `/docs`
+- All endpoints are live and tested on Railway
 
 Happy coding!
