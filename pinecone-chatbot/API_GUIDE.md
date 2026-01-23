@@ -4,18 +4,17 @@ Welcome! This guide will help you integrate the Pinecone Chatbot API into your w
 
 ## Quick Start
 
-The API will be hosted on Railway at:
+The API is hosted on Railway at:
 ```
-https://your-app-name.railway.app
+https://fabulous-healing-production.up.railway.app
 ```
-*(Replace with your actual Railway URL after deployment)*
 
 ### Basic Chat Request
 
 Here's the simplest way to send a message:
 
 ```javascript
-const API_URL = 'https://your-app-name.railway.app';
+const API_URL = 'https://fabulous-healing-production.up.railway.app';
 
 const response = await fetch(`${API_URL}/api/chat`, {
   method: 'POST',
@@ -45,7 +44,7 @@ console.log(data.session_id); // Use this for conversation continuity
 Returns helpful information about how to use the chat endpoint.
 
 ```javascript
-const response = await fetch('https://your-app-name.railway.app/api/chat');
+const response = await fetch('https://fabulous-healing-production.up.railway.app/api/chat');
 const info = await response.json();
 // Returns endpoint documentation and usage examples
 ```
@@ -88,7 +87,7 @@ All fields except `message` are optional:
 #### Example Request
 
 ```javascript
-const API_URL = 'https://your-app-name.railway.app';
+const API_URL = 'https://fabulous-healing-production.up.railway.app';
 
 const response = await fetch(`${API_URL}/api/chat`, {
   method: 'POST',
@@ -133,7 +132,7 @@ Clear the conversation history for a session.
 #### Example
 
 ```javascript
-const API_URL = 'https://your-app-name.railway.app';
+const API_URL = 'https://fabulous-healing-production.up.railway.app';
 
 const response = await fetch(`${API_URL}/api/reset`, {
   method: 'POST',
@@ -154,7 +153,7 @@ console.log(data.success); // true if successful
 Check if the API is running.
 
 ```javascript
-const API_URL = 'https://your-app-name.railway.app';
+const API_URL = 'https://fabulous-healing-production.up.railway.app';
 
 const response = await fetch(`${API_URL}/health`);
 const data = await response.json();
@@ -168,7 +167,7 @@ const data = await response.json();
 Get API information and available endpoints.
 
 ```javascript
-const API_URL = 'https://your-app-name.railway.app';
+const API_URL = 'https://fabulous-healing-production.up.railway.app';
 
 const response = await fetch(`${API_URL}/`);
 const data = await response.json();
@@ -181,7 +180,7 @@ const data = await response.json();
 
 Swagger UI for interactive API testing. Open in your browser:
 ```
-https://your-app-name.railway.app/docs
+https://fabulous-healing-production.up.railway.app/docs
 ```
 
 ## Parameters Explained
@@ -291,7 +290,7 @@ system_prompt: "You are a technical support assistant. Always provide step-by-st
 
 import { useState } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL || 'https://your-app-name.railway.app';
+const API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL || 'https://fabulous-healing-production.up.railway.app';
 
 export default function SimpleChat() {
   const [messages, setMessages] = useState([]);
@@ -399,7 +398,7 @@ export default function SimpleChat() {
 // hooks/useChat.js
 import { useState, useCallback } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL || 'https://your-app-name.railway.app';
+const API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL || 'https://fabulous-healing-production.up.railway.app';
 
 export function useChat() {
   const [messages, setMessages] = useState([]);
@@ -598,7 +597,7 @@ const response = await fetch(`${API_URL}/api/chat`, {
 In your Next.js project, add to `.env.local`:
 
 ```env
-NEXT_PUBLIC_CHAT_API_URL=https://your-app-name.railway.app
+NEXT_PUBLIC_CHAT_API_URL=https://fabulous-healing-production.up.railway.app
 ```
 
 Or use the default URL directly in your code (already set in examples above).
@@ -609,22 +608,22 @@ You can test the API using curl:
 
 ```bash
 # Health check
-curl https://your-app-name.railway.app/health
+curl https://fabulous-healing-production.up.railway.app/health
 
 # Chat endpoint
-curl -X POST https://your-app-name.railway.app/api/chat \
+curl -X POST https://fabulous-healing-production.up.railway.app/api/chat \
   -H "Content-Type: application/json" \
   -d '{"message": "What installation instructions are available?"}'
 
 # With session ID
-curl -X POST https://your-app-name.railway.app/api/chat \
+curl -X POST https://fabulous-healing-production.up.railway.app/api/chat \
   -H "Content-Type: application/json" \
   -d '{"message": "Tell me more", "session_id": "your-session-id"}'
 ```
 
 ## Need Help?
 
-- Check the interactive API docs at `https://your-app-name.railway.app/docs`
+- Check the interactive API docs at `https://fabulous-healing-production.up.railway.app/docs`
 - Review the main README.md for architecture details
 - Test endpoints using the Swagger UI at `/docs`
 - All endpoints are live and tested on Railway
